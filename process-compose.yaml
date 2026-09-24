@@ -1,0 +1,37 @@
+#!/usr/bin/env -S process-compose -f
+
+# or execute via `process-compose up
+
+version: "0.5"
+
+processes:
+  backend:
+    command: uv run uvicorn app.main:app
+    working_dir: ./backend
+    ready_log_line: "Application startup complete"   # uvicorn's usual startup line
+    shutdown:
+      signal: 2            # SIGINT, same as Ctrl-C
+      timeout_seconds: 10  # then SIGKILL
+
+  frontend:
+    command: npm run dev
+    working_dir: ./frontend
+    depends_on:
+      backend:
+        condition: process_log_ready
+    readiness_probe:
+      http_get:
+        host: localhost
+        port: 5173
+        path: /
+      initial_delay_seconds: 1
+      period_seconds: 1
+    shutdown:
+      signal: 2
+      timeout_seconds: 10
+
+  open-browser:
+    command: xdg-open http://localhost:5173   # `open` on macOS
+    depends_on:
+      frontend:
+        condition: process_healthy
