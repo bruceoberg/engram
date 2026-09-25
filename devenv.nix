@@ -14,6 +14,7 @@
     #version = "3.13";
     package = pkgs.python313;
     venv.enable = true;
+    directory = "./backend";
 
     uv =
     {
@@ -25,6 +26,7 @@
   languages.javascript =
   {
     enable = true;
+    directory = "./frontend";
 
     npm =
     {
