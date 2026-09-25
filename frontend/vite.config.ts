@@ -27,6 +27,7 @@ export default defineConfig({
     },
     server: {
         port: parseInt(process.env.VITE_PORT || '5173', 10),
+        allowedHosts: true,
         proxy: {
             '/api': {
                 target: `http://localhost:${process.env.VITE_BACKEND_PORT || '8000'}`,
