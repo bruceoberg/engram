@@ -14,7 +14,7 @@ processes:
       timeout_seconds: 10  # then SIGKILL
 
   frontend:
-    command: npm run dev
+    command: npm run dev -- --host 0.0.0.0 # accept from everywhere
     working_dir: ./frontend
     depends_on:
       backend:
